@@ -38,6 +38,7 @@ public class Cliente {
     public String getCorreo() {
         return correo;
     }
+    public String getNombre() { return nombre;}
     public int getPuntos() { return puntos; }
     public Nivel getNivel() { return nivel; }
 }
