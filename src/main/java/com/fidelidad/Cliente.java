@@ -34,6 +34,10 @@ public class Cliente {
     }
 
     // Getters para pruebas
+
+    public String getCorreo() {
+        return correo;
+    }
     public int getPuntos() { return puntos; }
     public Nivel getNivel() { return nivel; }
 }
