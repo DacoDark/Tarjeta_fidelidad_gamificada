@@ -18,8 +18,8 @@ public class Compra {
 
     public int calcularPuntos(){
         int puntosBase = monto/100;
-        int bono = cliente.getNivel().bono(puntosBase);
-        return puntosBase + bono;
+        double bonificacion = cliente.getNivel().getBono();
+        return (int) Math.floor(puntosBase * (1 + bonificacion));
     }
 
     public Cliente getCliente() { return cliente; }

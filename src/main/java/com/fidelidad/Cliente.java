@@ -21,16 +21,16 @@ public class Cliente {
     }
 
     public void registrarCompra(double monto) {
-        int puntosGanados = (int) monto;
-        puntos += puntosGanados + nivel.bono(puntosGanados);
-        actualizarNivel();
+        int puntosBase = (int) (monto/100);
+        double bonificacion = nivel.getBono();
+        int puntosGanados = (int) Math.floor(puntosBase * (1 + bonificacion));
+
+        this.puntos += puntosGanados;
+        actualizarNivel(); // metodo que usa Nivel.calcularNivel() con los puntos actualizados.
     }
 
     private void actualizarNivel() {
-        if (puntos >= 10000) nivel = Nivel.PLATINO;
-        else if (puntos >= 5000) nivel = Nivel.ORO;
-        else if (puntos >= 1000) nivel = Nivel.PLATA;
-        else nivel = Nivel.BRONCE;
+        this.nivel = Nivel.calcularNivel(this.puntos);
     }
 
     // Getters para pruebas
