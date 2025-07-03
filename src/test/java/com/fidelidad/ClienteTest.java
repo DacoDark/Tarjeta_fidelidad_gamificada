@@ -8,4 +8,13 @@ public class ClienteTest {
     void pruebaInicial(){
         assertTrue(true);
     }
+
+    @Test
+    void ClienteSeCreaCorectamente(){
+    }
+
+    @Test
+    void noPermiteCoreoInvalido(){
+        
+    }
 }
