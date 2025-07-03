@@ -1,6 +1,7 @@
 package com.fidelidad.repositorio;
 
 import com.fidelidad.Cliente;
+import com.fidelidad.repositorio.ClienteRepositorio;
 import com.fidelidad.Nivel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ClienteRepositorioTest {
 
-    private ClienteRepositorioTest repo;
+    private ClienteRepositorio repo;
 
     @BeforeEach
     void setUp() {
-        repo = new ClienteRepositorioTest();
+        repo = new ClienteRepositorio();
     }
 
     @Test
@@ -25,7 +26,7 @@ public class ClienteRepositorioTest {
 
         Optional<Cliente> resultado = repo.buscarPorId("1");
         assertTrue(resultado.isPresent());
-        assertEquals("Ana", resultado.get().getNombre());
+        assertEquals("David", resultado.get().getNombre());
     }
 
     @Test
@@ -51,7 +52,7 @@ public class ClienteRepositorioTest {
     void poderEliminarCliente() {
         Cliente c = new Cliente("1","Ana","ana@gmail.com");
         repo.guardar(c);
-        repo.eleminar("1");
+        repo.eliminar("1");
 
         assertFalse(repo.buscarPorId("1").isPresent());
     }

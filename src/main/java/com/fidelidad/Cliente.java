@@ -35,10 +35,13 @@ public class Cliente {
 
     // Getters para pruebas
 
+    public String getId() {return id;}
     public String getCorreo() {
         return correo;
     }
     public String getNombre() { return nombre;}
     public int getPuntos() { return puntos; }
     public Nivel getNivel() { return nivel; }
+
+    public void setNombre(String nombre) { this.nombre = nombre;}
 }
