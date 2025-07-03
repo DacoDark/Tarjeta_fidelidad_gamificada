@@ -44,4 +44,11 @@ public class Cliente {
     public Nivel getNivel() { return nivel; }
 
     public void setNombre(String nombre) { this.nombre = nombre;}
+    public void setNivel(Nivel nivel) { this.nivel = nivel;}
+
+    //Metodo para aplicar el cálculo de nivel después de cada compra
+    public void agregarPuntos(int puntos) {
+        this.puntos += puntos;
+        this.nivel = Nivel.calcularNivel(this.puntos);
+    }
 }
