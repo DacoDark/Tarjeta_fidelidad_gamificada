@@ -14,6 +14,7 @@ public class CompraTest {
     @Test
     void puntosBaseCalculoCorrecto(){
         Cliente cliente = new Cliente("1","miguel","miguel@gmail.com");
+        cliente.setNivel(Nivel.BRONCE);
         Compra compra = new Compra("c1", cliente, 850, LocalDate.now());
 
         int puntos = compra.calcularPuntos();

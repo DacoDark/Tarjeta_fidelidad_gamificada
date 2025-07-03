@@ -1,7 +1,7 @@
 package com.fidelidad;
 
 public enum Nivel {
-    BRONCE(0, 499, 0.2),
+    BRONCE(0, 499, 0),
     PLATA(500, 1499,0.2),
     ORO(1500,2999,0.5),
     PLATINO(3000, Integer.MAX_VALUE, 1.0);

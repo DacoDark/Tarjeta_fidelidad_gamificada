@@ -36,6 +36,6 @@ public class ClienteTest {
         assertEquals(Nivel.ORO, c.getNivel());
 
         c.agregarPuntos(1500); // 1600+1500 -> Esto debería subirlo a PLATINO
-        assertEquals(Nivel.ORO, c.getNivel());
+        assertEquals(Nivel.PLATINO, c.getNivel());
     }
 }
