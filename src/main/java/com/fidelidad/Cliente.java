@@ -1,14 +1,23 @@
 package com.fidelidad;
 
 public class Cliente {
+    private final String id;
     private String nombre;
+    private String correo;
     private int puntos;
     private Nivel nivel;
+    private int strakDias;
 
-    public Cliente(String nombre) {
+    public Cliente(String id, String nombre, String correo) {
+        if (!correo.contains("@")) {
+            throw new IllegalArgumentException("Correo no valido");
+        }
+        this.id = id;
         this.nombre = nombre;
+        this.correo = correo;
         this.puntos = 0;
         this.nivel = Nivel.BRONCE;
+        this.strakDias = 0;
     }
 
     public void registrarCompra(double monto) {
