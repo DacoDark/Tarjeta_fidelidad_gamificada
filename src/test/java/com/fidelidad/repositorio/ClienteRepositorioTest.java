@@ -16,7 +16,7 @@ public class ClienteRepositorioTest {
 
     @BeforeEach
     void setUp() {
-        repo = new ClienteRepositorio();
+        repo = new ClienteRepositorioMemoria();
     }
 
     @Test
@@ -24,9 +24,9 @@ public class ClienteRepositorioTest {
         Cliente c = new Cliente("1","David","david@example.com");
         repo.guardar(c);
 
-        Optional<Cliente> resultado = repo.buscarPorId("1");
-        assertTrue(resultado.isPresent());
-        assertEquals("David", resultado.get().getNombre());
+        Cliente resultado = repo.buscarPorId("1");
+        assertNotNull(resultado);
+        assertEquals("David", resultado.getNombre());
     }
 
     @Test
@@ -34,18 +34,20 @@ public class ClienteRepositorioTest {
         repo.guardar(new Cliente("1","Ana","ana@gmail.com"));
         repo.guardar(new Cliente("2","Luis","luis@gmail.com"));
 
-        List<Cliente> lista = repo.listar();
+        List<Cliente> lista = repo.obtenerTodos();
         assertEquals(2, lista.size());
     }
 
     @Test
-    void poderactualizarCliente() {
+    void poderActualizarCliente() {
         Cliente c = new Cliente("1","Ana","ana@gmail.com");
         repo.guardar(c);
-        c.setNombre("Carmen");
-        repo.guardar(c);
 
-        assertEquals("Carmen", repo.buscarPorId("1").get().getNombre());
+        c.setNombre("Carmen");
+        repo.guardar(c); //Sobrescribe el nombre
+
+        Cliente actualizado = repo.buscarPorId("1");
+        assertEquals("Carmen", actualizado.getNombre());
     }
 
     @Test
@@ -54,6 +56,7 @@ public class ClienteRepositorioTest {
         repo.guardar(c);
         repo.eliminar("1");
 
-        assertFalse(repo.buscarPorId("1").isPresent());
+        Cliente eliminado = repo.buscarPorId("1");
+        assertNull(eliminado);
     }
 }
