@@ -1,5 +1,8 @@
-package com.fidelidad;
+package com.fidelidad.modelo;
 
+import com.fidelidad.Cliente;
+import com.fidelidad.Nivel;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +18,7 @@ public class ClienteTest {
         assertEquals("David", c.getNombre());
         assertEquals("david@example.com", c.getCorreo());
         assertEquals(0,c.getPuntos());
-        assertEquals(Nivel.BRONCE,c.getNivel());
+        Assertions.assertEquals(Nivel.BRONCE,c.getNivel());
     }
 
     @Test
