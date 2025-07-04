@@ -61,4 +61,26 @@ public class CompraServicioTest {
         int puntosEsperados = puntosBase + bonus;
         assertEquals(puntosEsperados, cliente.getPuntos());
     }
+
+    @Test
+    void bonusSeReiniciaAlCambiarDeDia() {
+        Cliente cliente = new Cliente("4", "Ana", "Ana@mail.com");
+        CompraRepositorio repo = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(repo);
+
+        LocalDate hoy = LocalDate.now();
+        LocalDate manana = hoy.plusDays(1);
+
+        servicio.registrarCompra("c1", cliente, 1000, hoy);
+        servicio.registrarCompra("c2", cliente, 1000, hoy);
+        servicio.registrarCompra("c3", cliente, 1000, hoy); // +10 bonus
+
+        servicio.registrarCompra("c4", cliente, 1000, manana);
+        servicio.registrarCompra("c5", cliente, 1000, manana);
+        servicio.registrarCompra("c6", cliente, 1000, manana); // +10 bonus
+
+        int puntosEsperados = (6 * 10) + (2 * 10); // 6 compras, 2 bonus
+        assertEquals(puntosEsperados, cliente.getPuntos());
+    }
+
 }
