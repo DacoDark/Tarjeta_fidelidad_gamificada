@@ -21,4 +21,25 @@ public class ClienteServicioTest {
         assertEquals("David", cliente.getNombre());
         assertEquals("david@mail.com",cliente.getCorreo());
     }
+
+    @Test
+    void noPermiteCorreoInvalido() {
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            servicio.crearCliente("1", "David", "davidmail.com");
+        });
+    }
+
+    @Test
+    void puedeListarClientes() {
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+
+        servicio.crearCliente("1", "David", "david@mail.com");
+        servicio.crearCliente("2", "Fran", "Fran@mail.com");
+
+        assertEquals(2,servicio.listarClientes().size());
+    }
 }
