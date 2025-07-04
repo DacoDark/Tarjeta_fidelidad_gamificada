@@ -39,4 +39,11 @@ public class ClienteServicio {
         cliente.setNombre(newnombre);
         cliente.setCorreo(newcorreo);
     }
+
+    public void eliminarCliente(String id){
+        Cliente cliente = repositorio.buscarPorId(id);
+        if (cliente != null) {
+            repositorio.eliminar(id);
+        }
+    }
 }
