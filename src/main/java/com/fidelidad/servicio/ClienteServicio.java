@@ -13,6 +13,10 @@ public class ClienteServicio {
     }
 
     public void crearCliente(String id, String nombre, String correo){
+        if (!correo.contains("@")) {
+            throw new IllegalArgumentException("El correo no es valido");
+        }
+        
         Cliente cliente = new Cliente(id, nombre, correo);
         repositorio.guardar(cliente);
     }
