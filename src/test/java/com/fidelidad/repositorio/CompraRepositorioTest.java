@@ -13,7 +13,7 @@ public class CompraRepositorioTest {
 
     @Test
     void guardarYobtenerCompraPorCliente(){
-        CompreRepositorio repo = new ClienteRepositorio();
+        CompraRepositorio repo = new CompraRepositorioMemoria();
         Cliente cliente = new Cliente("1","David","david@example.com");
 
         Compra compra1 = new Compra("c1", cliente, 500, LocalDate.now());
@@ -31,7 +31,7 @@ public class CompraRepositorioTest {
 
     @Test
     void obtenerPorClienteYFechaFiltraCorrectamente(){
-        CompraRepositorio repo = new CompraRepositorio();
+        CompraRepositorio repo = new CompraRepositorioMemoria();
         Cliente cliente = new Cliente("1","David","david@example.com");
 
         Compra compraHoy = new Compra("c1", cliente, 500, LocalDate.now());
