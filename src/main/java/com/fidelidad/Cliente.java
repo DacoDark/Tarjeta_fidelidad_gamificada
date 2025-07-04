@@ -45,6 +45,7 @@ public class Cliente {
 
     public void setNombre(String nombre) { this.nombre = nombre;}
     public void setNivel(Nivel nivel) { this.nivel = nivel;}
+    public void setCorreo(String correo) { this.correo = correo;}
 
     //Metodo para aplicar el cálculo de nivel después de cada compra
     public void agregarPuntos(int puntos) {

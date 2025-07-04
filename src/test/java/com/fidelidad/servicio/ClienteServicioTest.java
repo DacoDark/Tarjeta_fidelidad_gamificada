@@ -27,9 +27,7 @@ public class ClienteServicioTest {
         ClienteRepositorio repo = new ClienteRepositorioMemoria();
         ClienteServicio servicio = new ClienteServicio(repo);
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            servicio.crearCliente("1", "David", "davidmail.com");
-        });
+        assertThrows(IllegalArgumentException.class, () -> servicio.crearCliente("1", "David", "davidmail.com"));
     }
 
     @Test
@@ -67,7 +65,7 @@ public class ClienteServicioTest {
     }
 
     @Test
-    void noPermiteCorreoInvalidoEnEdicion() {
+    void noPermiteCorreoInvalidoEditado() {
         ClienteRepositorio repo = new ClienteRepositorioMemoria();
         ClienteServicio servicio = new ClienteServicio(repo);
         servicio.crearCliente("1", "Luis", "luis@mail.com");
