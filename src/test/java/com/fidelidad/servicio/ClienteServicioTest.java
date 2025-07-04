@@ -85,4 +85,21 @@ public class ClienteServicioTest {
         servicio.eliminarCliente("1");
         assertNull(repo.buscarPorId("1"));
     }
+
+    @Test
+    void puedeMostrarResumenDePuntosYNivel() {
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+
+        Cliente cliente = new Cliente("1", "Lucía", "lucia@mail.com");
+        cliente.agregarPuntos(1600); // Esto la sube a nivel ORO
+        repo.guardar(cliente);
+
+        String resumen = servicio.obtenerResumen("1");
+
+        assertTrue(resumen.contains("Lucía"));
+        assertTrue(resumen.contains("ORO"));
+        assertTrue(resumen.contains("1600"));
+    }
+
 }
