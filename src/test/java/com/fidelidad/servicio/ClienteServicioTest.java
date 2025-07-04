@@ -42,4 +42,37 @@ public class ClienteServicioTest {
 
         assertEquals(2,servicio.listarClientes().size());
     }
+
+    @Test
+    void puedeEditarNombreYCorreoCliente() {
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+
+        servicio.crearCliente("1", "Deivid", "deivid@mail.com");
+
+        servicio.editarCliente("1", "David","david@gmail.com");
+
+        Cliente cliente = repo.buscarPorId("1");
+        assertEquals("David",cliente.getCorreo());
+        assertEquals("david@mail.com",cliente.getCorreo());
+    }
+
+    @Test
+    void editarLanzaExcepcionSiClienteNoExiste() {
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+
+        assertThrows(IllegalArgumentException.class, () ->
+                servicio.editarCliente("999", "Otro", "otro@mail.com"));
+    }
+
+    @Test
+    void noPermiteCorreoInvalidoEnEdicion() {
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+        servicio.crearCliente("1", "Luis", "luis@mail.com");
+
+        assertThrows(IllegalArgumentException.class, () ->
+                servicio.editarCliente("1", "Luis", "correoSinArroba"));
+    }
 }
