@@ -23,8 +23,8 @@ public class CompraServicio {
                 .obtenerPorClienteYFecha(cliente.getId(), fecha)
                         .size();
 
-        //Si ya tiene 2, está sería la tercera compra y se le dan 10puntos de bonus
-        if(comprasHoy == 2) {
+        //Si ya tiene 2, está sería la tercera compra y se le dan 10puntos de bonus. Se agrega para 2+ compras.
+        if(comprasHoy >= 2) {
             puntos += 10;
         }
 
