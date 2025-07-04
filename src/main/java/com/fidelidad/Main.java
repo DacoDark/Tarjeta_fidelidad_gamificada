@@ -38,7 +38,17 @@ public class Main {
                     menuGestionCompras();
                     break;
                 case "3":
-                    //menuVerPuntos();
+                     {
+                        System.out.print("Ingrese ID del cliente: ");
+                        String id = scanner.nextLine();
+                        try {
+                            String resumen = clienteServicio.obtenerResumen(id);
+                            System.out.println(resumen);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("⚠️ " + e.getMessage());
+                        }
+                    }
+
                     break;
                 case "4":
                     menuprincipal = true;
