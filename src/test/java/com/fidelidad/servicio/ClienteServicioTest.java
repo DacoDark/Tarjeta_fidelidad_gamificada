@@ -73,4 +73,16 @@ public class ClienteServicioTest {
         assertThrows(IllegalArgumentException.class, () ->
                 servicio.editarCliente("1", "Luis", "correoSinArroba"));
     }
+
+    @Test
+    void puedeEliminarCliente(){
+        ClienteRepositorio repo = new ClienteRepositorioMemoria();
+        ClienteServicio servicio = new ClienteServicio(repo);
+
+        servicio.crearCliente("1", "Marisol", "marisol@mail.com");
+        assertNotNull(repo.buscarPorId("1"));
+
+        servicio.eliminarCliente("1");
+        assertNull(repo.buscarPorId("1"));
+    }
 }
