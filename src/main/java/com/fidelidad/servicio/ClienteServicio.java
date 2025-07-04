@@ -33,7 +33,7 @@ public class ClienteServicio {
         if (cliente == null) {
             throw new IllegalArgumentException("El cliente no existe");
         }
-        if (!newnombre.contains("@")) {
+        if (!newcorreo.contains("@")) {
             throw new IllegalArgumentException("El correo no es valido");
         }
         cliente.setNombre(newnombre);

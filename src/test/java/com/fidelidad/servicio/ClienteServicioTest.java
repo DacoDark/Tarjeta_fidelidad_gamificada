@@ -48,10 +48,10 @@ public class ClienteServicioTest {
 
         servicio.crearCliente("1", "Deivid", "deivid@mail.com");
 
-        servicio.editarCliente("1", "David","david@gmail.com");
+        servicio.editarCliente("1", "David","david@mail.com");
 
         Cliente cliente = repo.buscarPorId("1");
-        assertEquals("David",cliente.getCorreo());
+        assertEquals("David",cliente.getNombre());
         assertEquals("david@mail.com",cliente.getCorreo());
     }
 
