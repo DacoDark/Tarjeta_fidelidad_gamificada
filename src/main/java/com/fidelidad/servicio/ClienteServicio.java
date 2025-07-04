@@ -46,4 +46,20 @@ public class ClienteServicio {
             repositorio.eliminar(id);
         }
     }
+
+    public String obtenerResumen(String idCliente) {
+        Cliente cliente = repositorio.buscarPorId(idCliente);
+        if (cliente == null) {
+            throw new IllegalArgumentException("El cliente no existe");
+        }
+
+        return String.format(
+                "Cliente: %s\nNivel: %s\nPuntos: %d\nStreak de días con bonus: %d",
+                cliente.getNombre(),
+                cliente.getNivel().name(),
+                cliente.getPuntos(),
+                cliente.getStreakDias()
+        );
+    }
+
 }
