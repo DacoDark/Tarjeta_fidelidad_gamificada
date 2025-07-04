@@ -1,7 +1,6 @@
 package com.fidelidad.servicio;
 
 import com.fidelidad.Cliente;
-import com.fidelidad.Compra;
 import com.fidelidad.repositorio.CompraRepositorio;
 import com.fidelidad.repositorio.CompraRepositorioMemoria;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ public class CompraServicioTest {
 
         int puntosAntes = cliente.getPuntos();
 
-        //Tercera compra - solo se considera el caso de 1000 (recordar globalizar y asignar puntos base por cada $100->1pts)
+        //Tercera compra - solo se considera el caso de 1000 (recordar globalizar y asignar puntos base por cada $100->1 pts)
         servicio.registrarCompra("c3", cliente, 1000, LocalDate.now());
         int puntosBase = 1000/100; //Aquí globalizar.
         int puntosEsperados = puntosAntes + puntosBase + 10; //+10bonus tercera compra
