@@ -14,11 +14,11 @@ public class ClienteServicioTest {
         ClienteRepositorio repo = new ClienteRepositorioMemoria();
         ClienteServicio servicio = new ClienteServicio(repo);
 
-        servicio.crearCliente("1", "David", "david.@mail.com");
+        servicio.crearCliente("1", "David", "david@mail.com");
 
         Cliente cliente = repo.buscarPorId("1");
         assertNotNull(cliente);
-        assertEquals("David", cliente.getNivel());
+        assertEquals("David", cliente.getNombre());
         assertEquals("david@mail.com",cliente.getCorreo());
     }
 }
