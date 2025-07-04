@@ -43,5 +43,23 @@ public class CompraServicioTest {
         servicio.registrarCompra("c1", cliente, 1000, LocalDate.now());
         assertEquals(20, cliente.getPuntos(), "Puntos Base en segunda compra");
     }
-    
+
+    @Test
+    void recibeBonusCadaTresComprasDelMismoDia() {
+        Cliente cliente = new Cliente("3", "Pedro", "pedro@mail.com");
+        CompraRepositorio repo = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(repo);
+
+        // Realiza 10 compras el mismo día de $1000
+        for (int i = 1; i <= 10; i++) {
+            servicio.registrarCompra("c" + i, cliente, 1000, LocalDate.now());
+        }
+
+        // Cada compra da 10 puntos base
+        // En la 3 a 10 se otorgan +10 pts bonus (8 veces)
+        int puntosBase = 10 * 10; //100
+        int bonus = 8 * 10; //80
+        int puntosEsperados = puntosBase + bonus;
+        assertEquals(puntosEsperados, cliente.getPuntos());
+    }
 }
