@@ -11,4 +11,5 @@ public interface CompraRepositorio {
     List<Compra> obtenerPorCliente(String idCliente);
     List<Compra> obtenerPorClienteYFecha(String idCliente, LocalDate fecha);
     List<Compra> obtenerTodas();
+
 }

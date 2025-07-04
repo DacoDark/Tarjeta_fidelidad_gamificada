@@ -6,7 +6,7 @@ public class Cliente {
     private String correo;
     private int puntos;
     private Nivel nivel;
-    private int strakDias;
+    private int streakDias;
 
     public Cliente(String id, String nombre, String correo) {
         if (!correo.contains("@")) {
@@ -17,22 +17,8 @@ public class Cliente {
         this.correo = correo;
         this.puntos = 0;
         this.nivel = Nivel.BRONCE;
-        this.strakDias = 0;
+        this.streakDias = 0;
     }
-
-    public void registrarCompra(double monto) {
-        int puntosBase = (int) (monto/100);
-        double bonificacion = nivel.getBono();
-        int puntosGanados = (int) Math.floor(puntosBase * (1 + bonificacion));
-
-        this.puntos += puntosGanados;
-        actualizarNivel(); // metodo que usa Nivel.calcularNivel() con los puntos actualizados.
-    }
-
-    private void actualizarNivel() {
-        this.nivel = Nivel.calcularNivel(this.puntos);
-    }
-
     // Getters para pruebas
 
     public String getId() {return id;}
@@ -50,6 +36,22 @@ public class Cliente {
     //Metodo para aplicar el cálculo de nivel después de cada compra
     public void agregarPuntos(int puntos) {
         this.puntos += puntos;
+        actualizarNivel();
+    }
+
+    private void actualizarNivel() {
         this.nivel = Nivel.calcularNivel(this.puntos);
+    }
+
+    public void incrementarStreakDias() {
+        streakDias++;
+    }
+
+    public void reiniciarStreakDias() {
+        streakDias = 0;
+    }
+
+    public int getStreakDias() {
+        return streakDias;
     }
 }

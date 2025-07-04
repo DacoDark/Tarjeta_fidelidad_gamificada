@@ -1,57 +1,80 @@
 package com.fidelidad.servicio;
 
 import com.fidelidad.Cliente;
+import com.fidelidad.Compra;
+import com.fidelidad.repositorio.ClienteRepositorio;
+import com.fidelidad.repositorio.ClienteRepositorioMemoria;
 import com.fidelidad.repositorio.CompraRepositorio;
 import com.fidelidad.repositorio.CompraRepositorioMemoria;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompraServicioTest {
 
     @Test
-    void clienteRecibeBonusTerceraCompraDia(){
-        Cliente cliente = new Cliente("1","David","david@gmail.com");
-        CompraRepositorio repo = new CompraRepositorioMemoria();
-        CompraServicio servicio = new CompraServicio(repo);
+    void clienteRecibeBonusTerceraCompraDia() {
+        // Repositorios y servicio
+        ClienteRepositorio clienteRepositorio = new ClienteRepositorioMemoria();
+        CompraRepositorio compraRepositorio = new CompraRepositorioMemoria();
+        CompraServicio compraServicio = new CompraServicio(compraRepositorio, clienteRepositorio);
 
-        //Se simulan 2 compras hoy para david
-        servicio.registrarCompra("c1", cliente, 1000, LocalDate.now());
-        servicio.registrarCompra("c2", cliente, 1000, LocalDate.now());
+        // Cliente de prueba
+        Cliente cliente = new Cliente("1", "David", "david@gmail.com");
+        clienteRepositorio.guardar(cliente);
 
-        int puntosAntes = cliente.getPuntos();
+        // Simula 2 compras anteriores hoy
+        compraServicio.registrarCompra("c1", cliente.getId(), 500); // 5 pts
+        compraServicio.registrarCompra("c2", cliente.getId(), 500); // 5 pts
 
-        //Tercera compra - solo se considera el caso de 1000 (recordar globalizar y asignar puntos base por cada $100->1 pts)
-        servicio.registrarCompra("c3", cliente, 1000, LocalDate.now());
-        int puntosBase = 1000/100; //Aquí globalizar.
-        int puntosEsperados = puntosAntes + puntosBase + 10; //+10bonus tercera compra
-        assertEquals(puntosEsperados, cliente.getPuntos());
+        // La 3ra compra activa el bonus (+10 pts)
+        compraServicio.registrarCompra("c3", cliente.getId(), 1000); // 10 pts base + 10 bonus
+
+        // Total esperado:
+        // c1: 5 pts
+        // c2: 5 pts
+        // c3: 10 pts + 10 bonus
+        assertEquals(30, cliente.getPuntos());
+        assertEquals(1, cliente.getStreakDias());
     }
 
     @Test
     void noRecibeBonusEnPrimeraYSegundaCompraDia(){
-        Cliente cliente = new Cliente("2", "Juan", "Juan@mail.com");
-        CompraRepositorio repo = new CompraRepositorioMemoria();
-        CompraServicio servicio = new CompraServicio(repo);
+        // Repositorios en memoria
+        ClienteRepositorio clienteRepositorio = new ClienteRepositorioMemoria();
+        CompraRepositorio compraRepositorio = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(compraRepositorio, clienteRepositorio);
 
-        servicio.registrarCompra("c1", cliente, 1000, LocalDate.now());
+        Cliente cliente = new Cliente("2", "Juan", "Juan@mail.com");
+        clienteRepositorio.guardar(cliente);
+
+        //Se simula una primera compra para obtención de puntos
+        servicio.registrarCompra("c1",cliente.getId(),1000);
+
         assertEquals(10, cliente.getPuntos(), "Puntos Base en primera compra");
 
-        servicio.registrarCompra("c1", cliente, 1000, LocalDate.now());
+        //Se simula una segunda compra para obtención de puntos
+        servicio.registrarCompra("c2",cliente.getId(),1000);
         assertEquals(20, cliente.getPuntos(), "Puntos Base en segunda compra");
     }
 
     @Test
-    void recibeBonusCadaTresComprasDelMismoDia() {
+    void recibeBonusDespuesDeTresComprasDelMismoDia() {
+        // Repositorios en memoria
+        ClienteRepositorio clienteRepositorio = new ClienteRepositorioMemoria();
+        CompraRepositorio compraRepositorio = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(compraRepositorio, clienteRepositorio);
+
+        // Se crea el cliente al cual se le registran las compras
         Cliente cliente = new Cliente("3", "Pedro", "pedro@mail.com");
-        CompraRepositorio repo = new CompraRepositorioMemoria();
-        CompraServicio servicio = new CompraServicio(repo);
+        clienteRepositorio.guardar(cliente);
 
         // Realiza 10 compras el mismo día de $1000
         for (int i = 1; i <= 10; i++) {
-            servicio.registrarCompra("c" + i, cliente, 1000, LocalDate.now());
+            servicio.registrarCompra("c"+i,cliente.getId(),1000);
         }
 
         // Cada compra da 10 puntos base
@@ -64,23 +87,46 @@ public class CompraServicioTest {
 
     @Test
     void bonusSeReiniciaAlCambiarDeDia() {
-        Cliente cliente = new Cliente("4", "Ana", "Ana@mail.com");
-        CompraRepositorio repo = new CompraRepositorioMemoria();
-        CompraServicio servicio = new CompraServicio(repo);
+        // Repositorios y servicio
+        ClienteRepositorio clienteRepositorio = new ClienteRepositorioMemoria();
+        CompraRepositorio compraRepositorio = new CompraRepositorioMemoria();
+        CompraServicio compraServicio = new CompraServicio(compraRepositorio, clienteRepositorio);
 
-        LocalDate hoy = LocalDate.now();
-        LocalDate manana = hoy.plusDays(1);
+        // Crear cliente
+        Cliente cliente = new Cliente("1", "David", "david@gmail.com");
+        clienteRepositorio.guardar(cliente);
 
-        servicio.registrarCompra("c1", cliente, 1000, hoy);
-        servicio.registrarCompra("c2", cliente, 1000, hoy);
-        servicio.registrarCompra("c3", cliente, 1000, hoy); // +10 bonus
+        // Simulamos 2 compras AYER
+        LocalDate ayer = LocalDate.now().minusDays(1);
+        compraRepositorio.guardar(new Compra("c1", cliente, 500, ayer));
+        compraRepositorio.guardar(new Compra("c2", cliente, 500, ayer));
 
-        servicio.registrarCompra("c4", cliente, 1000, manana);
-        servicio.registrarCompra("c5", cliente, 1000, manana);
-        servicio.registrarCompra("c6", cliente, 1000, manana); // +10 bonus
+        // Hacemos una compra HOY
+        compraServicio.registrarCompra("c3", "1", 1000); // Primera compra del día
 
-        int puntosEsperados = (6 * 10) + (2 * 10); // 6 compras, 2 bonus
+        // No debería aplicar bonus, ya que es la única compra de hoy
+        int puntosEsperados = 10; // 1000/100 = 10 (nivel BRONCE, sin bonus)
+
         assertEquals(puntosEsperados, cliente.getPuntos());
+        assertEquals(0, cliente.getStreakDias()); // no se cumple la condición
+    }
+
+
+    @Test
+    void puedeObtenerComprasPorCliente() {
+        ClienteRepositorio clienteRepositorio = new ClienteRepositorioMemoria();
+        CompraRepositorio compraRepositorio = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(compraRepositorio, clienteRepositorio);
+
+        Cliente cliente = new Cliente("1", "David", "david@mail.com");
+        clienteRepositorio.guardar(cliente);
+
+        servicio.registrarCompra("c1",cliente.getId(),1000);
+        servicio.registrarCompra("c2",cliente.getId(),2000);
+        servicio.registrarCompra("c3",cliente.getId(),1500);
+
+        List<Compra> compras = servicio.obtenerComprasPorCliente("1");
+        assertEquals(3, compras.size());
     }
 
 }
