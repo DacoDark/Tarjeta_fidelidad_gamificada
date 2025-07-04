@@ -30,4 +30,18 @@ public class CompraServicioTest {
         int puntosEsperados = puntosAntes + puntosBase + 10; //+10bonus tercera compra
         assertEquals(puntosEsperados, cliente.getPuntos());
     }
+
+    @Test
+    void noRecibeBonusEnPrimeraYSegundaCompraDia(){
+        Cliente cliente = new Cliente("2", "Juan", "Juan@mail.com");
+        CompraRepositorio repo = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(repo);
+
+        servicio.registrarCompra("c1", cliente, 1000, LocalDate.now());
+        assertEquals(10, cliente.getPuntos(), "Puntos Base en primera compra");
+
+        servicio.registrarCompra("c1", cliente, 1000, LocalDate.now());
+        assertEquals(20, cliente.getPuntos(), "Puntos Base en segunda compra");
+    }
+    
 }
