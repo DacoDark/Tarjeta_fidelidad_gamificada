@@ -1,6 +1,5 @@
 package com.fidelidad.repositorio;
 
-import com.fidelidad.Cliente;
 import com.fidelidad.Compra;
 
 import java.time.LocalDate;

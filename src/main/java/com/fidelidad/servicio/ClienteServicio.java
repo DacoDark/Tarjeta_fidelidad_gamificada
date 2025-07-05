@@ -54,7 +54,7 @@ public class ClienteServicio {
         }
 
         return String.format(
-                "Cliente: %s\nNivel: %s\nPuntos: %d\nStreak de días con bonus: %d",
+                "Cliente: %s%nNivel: %s%nPuntos: %d%nStreak de días con bonus: %d",
                 cliente.getNombre(),
                 cliente.getNivel().name(),
                 cliente.getPuntos(),

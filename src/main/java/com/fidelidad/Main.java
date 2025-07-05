@@ -10,8 +10,14 @@ import com.fidelidad.servicio.CompraServicio;
 import java.util.List;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
 public class Main {
 
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final ClienteRepositorio clienteRepo = new ClienteRepositorioMemoria();
     private static final ClienteServicio clienteServicio = new ClienteServicio(clienteRepo);
     private static final CompraRepositorio compraRepo = new CompraRepositorioMemoria();
@@ -19,16 +25,18 @@ public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
 
+    private static final String ERROR_PREFIX = "⚠️ Error: ";
+
     public static void main(String[] args) {
         boolean menuprincipal = false;
 
         while(!menuprincipal){
-            System.out.println("\n Bienvenidos al Sistema de Fidelidad ");
-            System.out.println("1. Gestión de Clientes");
-            System.out.println("2. Gestión de Compras");
-            System.out.println("3. Mostrar Puntos y Nivel de un Cliente");
-            System.out.println("4. Salir");
-            System.out.print("Seleccione una opción: ");
+            logger.info("\n Bienvenidos al Sistema de Fidelidad ");
+            logger.info("1. Gestión de Clientes");
+            logger.info("2. Gestión de Compras");
+            logger.info("3. Mostrar Puntos y Nivel de un Cliente");
+            logger.info("4. Salir");
+            logger.info("Seleccionar una opción: ");
             String opcion = scanner.nextLine();
             switch (opcion) {
                 case "1":
@@ -39,13 +47,13 @@ public class Main {
                     break;
                 case "3":
                      {
-                        System.out.print("Ingrese ID del cliente: ");
+                         logger.info("Ingrese ID del cliente: ");
                         String id = scanner.nextLine();
                         try {
                             String resumen = clienteServicio.obtenerResumen(id);
-                            System.out.println(resumen);
+                            logger.info(resumen);
                         } catch (IllegalArgumentException e) {
-                            System.out.println("⚠️ " + e.getMessage());
+                            logger.warn((ERROR_PREFIX)+ "{}", e.getMessage());
                         }
                     }
 
@@ -54,7 +62,7 @@ public class Main {
                     menuprincipal = true;
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    logger.warn("Opción inválida.");
             }
 
         }
@@ -64,13 +72,13 @@ public class Main {
         boolean volver = false;
 
         while(!volver){
-            System.out.println("\n Gestión de Clientes ");
-            System.out.println("1. Crear cliente");
-            System.out.println("2. Listar clientes");
-            System.out.println("3. Editar cliente");
-            System.out.println("4. Eliminar cliente");
-            System.out.println("5. Volver");
-            System.out.print("Seleccione una opción: ");
+            logger.info("\n Gestión de Clientes ");
+            logger.info("1. Crear cliente");
+            logger.info("2. Listar clientes");
+            logger.info("3. Editar cliente");
+            logger.info("4. Eliminar cliente");
+            logger.info("5. Volver");
+            logger.info("Seleccione una opción: ");
             String opcion = scanner.nextLine();
 
             switch (opcion) {
@@ -90,7 +98,7 @@ public class Main {
                     volver = true;
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    logger.warn("Opción inválida, por favor ingrese una nueva opcion.");
             }
         }
     }
@@ -99,57 +107,61 @@ public class Main {
      * Métodos para Gestión de clientes
      */
     private static void crearCliente(){
-        System.out.print("ID: ");
+        logger.info("ID: ");
         String id = scanner.nextLine();
-        System.out.print("Nombre: ");
+        logger.info("Nombre: ");
         String nombre = scanner.nextLine();
-        System.out.print("Correo: ");
+        logger.info("Correo: ");
         String correo = scanner.nextLine();
 
         try {
             clienteServicio.crearCliente(id, nombre, correo);
-            System.out.println("✅ Cliente creado correctamente.");
+            logger.info("✅ Cliente creado correctamente.");
         } catch (Exception e) {
-            System.out.println("⚠️ Error: " + e.getMessage());
+            logger.warn(ERROR_PREFIX + "{}", e.getMessage());
         }
     }
 
     private static void listarClientes(){
         var clientes = clienteServicio.listarClientes();
         if(clientes.isEmpty()){
-            System.out.println("No hay clientes registrados.");
+            logger.warn("No hay clientes registrados.");
         } else {
-            System.out.println("Listado de clientes:");
+            logger.info("Listado de clientes:");
             for (var cliente : clientes) {
-                System.out.printf("ID: %s | Nombre: %s | Correo: %s | Puntos: %d | Nivel: %s%n",
-                        cliente.getId(), cliente.getNombre(), cliente.getCorreo(), cliente.getPuntos(), cliente.getNivel());
+                logger.info("ID: {} | Nombre: {} | Correo: {} | Puntos: {} | Nivel: {}",
+                        cliente.getId(),
+                        cliente.getNombre(),
+                        cliente.getCorreo(),
+                        cliente.getPuntos(),
+                        cliente.getNivel());
             }
         }
     }
 
     private static void editarCliente(){
-        System.out.print("ID del cliente a editar: ");
+        logger.info("ID del cliente a editar: ");
         String id = scanner.nextLine();
 
-        System.out.print("Nuevo nombre: ");
+        logger.info("Nuevo nombre: ");
         String nuevoNombre = scanner.nextLine();
-        System.out.print("Nuevo correo: ");
+        logger.info("Nuevo correo: ");
         String nuevoCorreo = scanner.nextLine();
 
         try {
             clienteServicio.editarCliente(id, nuevoNombre, nuevoCorreo);
-            System.out.println("✅ Cliente actualizado.");
+            logger.info("✅ Cliente actualizado.");
         } catch (Exception e) {
-            System.out.println("⚠️ Error: " + e.getMessage());
+            logger.warn(ERROR_PREFIX + "{}", e.getMessage());
         }
     }
 
     private static void eliminarCliente(){
-        System.out.print("ID del cliente a eliminar: ");
+        logger.info("ID del cliente a eliminar: ");
         String id = scanner.nextLine();
 
         clienteServicio.eliminarCliente(id);
-        System.out.println("✅ Cliente eliminado (si existía).");
+        logger.info("✅ Cliente eliminado (si existía).");
     }
 
     /***********************************
@@ -159,11 +171,11 @@ public class Main {
         boolean volver = false;
 
         while (!volver) {
-            System.out.println("\n Gestión de Compras ");
-            System.out.println("1. Registrar compra");
-            System.out.println("2. Listar compras por cliente");
-            System.out.println("3. Volver");
-            System.out.print("Seleccione una opción: ");
+            logger.info("\n Gestión de Compras ");
+            logger.info("1. Registrar compra");
+            logger.info("2. Listar compras por cliente");
+            logger.info("3. Volver");
+            logger.info("Seleccione una opción: ");
             String opcion = scanner.nextLine();
 
             switch (opcion) {
@@ -177,39 +189,39 @@ public class Main {
                     volver = true;
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    logger.warn("Opción inválida.");
             }
         }
     }
 
     private static void registrarCompra() {
-        System.out.print("ID compra: ");
+        logger.info("ID compra: ");
         String idCompra = scanner.nextLine();
-        System.out.print("ID cliente: ");
+        logger.info("ID cliente: ");
         String idCliente = scanner.nextLine();
-        System.out.print("Monto ($): ");
+        logger.info("Monto ($): ");
         int monto = Integer.parseInt(scanner.nextLine());
 
         try {
             compraServicio.registrarCompra(idCompra, idCliente, monto);
-            System.out.println("✅ Compra registrada con éxito.");
+            logger.info("✅ Compra registrada con éxito.");
         } catch (Exception e) {
-            System.out.println("⚠️ Error: " + e.getMessage());
+            logger.warn(ERROR_PREFIX + "{}", e.getMessage());
         }
     }
 
     private static void listarComprasPorCliente() {
-        System.out.print("ID cliente: ");
+        logger.info("ID cliente: ");
         String idCliente = scanner.nextLine();
 
         List<Compra> compras = compraServicio.obtenerComprasPorCliente(idCliente);
 
         if (compras.isEmpty()) {
-            System.out.println("⚠️ No hay compras registradas para este cliente.");
+            logger.warn("⚠️ No hay compras registradas para este cliente.");
         } else {
-            System.out.println("📋 Historial de compras:");
+            logger.info("📋 Historial de compras:");
             for (Compra c : compras) {
-                System.out.printf("ID: %s | Fecha: %s | Monto: %s | Puntos otorgados: %d%n",
+                logger.info("ID: {} | Fecha: {} | Monto: {} | Puntos otorgados: {}",
                         c.getIdCompra(), c.getFecha(), c.getMonto(), c.calcularPuntos());
             }
         }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ClienteTest {
+class ClienteTest {
     @Test
     void pruebaInicial(){
         assertTrue(true);
@@ -23,9 +23,7 @@ public class ClienteTest {
 
     @Test
     void noPermiteCoreoInvalido(){
-        assertThrows(IllegalArgumentException.class, () -> {
-           new Cliente("2","Ana","ana#sinarroba.com");
-        });
+        assertThrows(IllegalArgumentException.class, () -> new Cliente("2","Ana","ana#sinarroba.com"));
     }
 
     @Test
@@ -40,5 +38,12 @@ public class ClienteTest {
 
         c.agregarPuntos(1500); // 1600+1500 -> Esto debería subirlo a PLATINO
         assertEquals(Nivel.PLATINO, c.getNivel());
+    }
+
+    @Test
+    void retornaBronceCuandoPuntosEstanFueraDeTodoRango() {
+        // Ejemplo borde: puntos negativos
+        Nivel nivel = Nivel.calcularNivel(-100);
+        assertEquals(Nivel.BRONCE, nivel);
     }
 }

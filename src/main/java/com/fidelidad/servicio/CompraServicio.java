@@ -30,7 +30,7 @@ public class CompraServicio {
         List<Compra> comprasHoy = compraRepositorio.obtenerPorClienteYFecha(idCliente, hoy);
 
         //Calculamos los puntos base
-        int puntosBase = (int)(monto/100);
+        int puntosBase = monto/100;
 
         //aplicamos bono por nivel
         double bono = cliente.getNivel().getBono();

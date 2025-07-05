@@ -12,8 +12,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CompraServicioTest {
+class CompraServicioTest {
 
     @Test
     void clienteRecibeBonusTerceraCompraDia() {
@@ -128,5 +129,17 @@ public class CompraServicioTest {
         List<Compra> compras = servicio.obtenerComprasPorCliente("1");
         assertEquals(3, compras.size());
     }
+
+    @Test
+    void lanzaExcepcionSiClienteNoExiste() {
+        ClienteRepositorio clienteRepo = new ClienteRepositorioMemoria();
+        CompraRepositorio compraRepo = new CompraRepositorioMemoria();
+        CompraServicio servicio = new CompraServicio(compraRepo, clienteRepo);
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> servicio.registrarCompra("c1", "id-invalido", 1000));
+
+        assertEquals("Cliente no encontrado", ex.getMessage());
+    }
+
 
 }

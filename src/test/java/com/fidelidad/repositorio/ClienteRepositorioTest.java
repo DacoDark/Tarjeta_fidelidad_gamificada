@@ -1,15 +1,13 @@
 package com.fidelidad.repositorio;
 
 import com.fidelidad.Cliente;
-import com.fidelidad.repositorio.ClienteRepositorio;
-import com.fidelidad.Nivel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ClienteRepositorioTest {
+class ClienteRepositorioTest {
 
     private ClienteRepositorio repo;
 

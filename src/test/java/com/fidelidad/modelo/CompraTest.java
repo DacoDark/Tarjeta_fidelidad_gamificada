@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CompraTest {
+class CompraTest {
 
     @Test
     void puntosBaseCalculoCorrecto(){
@@ -30,4 +30,13 @@ public class CompraTest {
         int puntos = compra.calcularPuntos();
         assertEquals(15, puntos); //10x1.5 = 15
     }
+
+    @Test
+    void compraTieneMontoCorrecto() {
+        Cliente cliente = new Cliente("1","marco","marco@gmail.com");
+        Compra compra = new Compra("c1", cliente, 500, LocalDate.now());
+        assertEquals("c1", compra.getIdCompra());
+        assertEquals(500, compra.getMonto());
+    }
+
 }
