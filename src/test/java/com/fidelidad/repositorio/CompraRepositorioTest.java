@@ -33,16 +33,27 @@ class CompraRepositorioTest {
     void obtenerPorClienteYFechaFiltraCorrectamente(){
         CompraRepositorio repo = new CompraRepositorioMemoria();
         Cliente cliente = new Cliente("1","David","david@example.com");
+        Cliente cliente2 = new Cliente("2", "Ana", "ana@email.com");
 
-        Compra compraHoy = new Compra("c1", cliente, 500, LocalDate.now());
-        Compra compraAyer = new Compra("c2", cliente, 1000, LocalDate.now().minusDays(1));
+        LocalDate compraHoy = LocalDate.now();
+        LocalDate compraAyer = compraHoy.minusDays(1);
 
-        repo.guardar(compraHoy);
-        repo.guardar(compraAyer);
+        // 1. Coincide cliente y fecha
+        Compra compraValida = new Compra("c1", cliente, 500, compraHoy);
+        repo.guardar(compraValida);
 
-        List<Compra> comprasHoy = repo.obtenerPorClienteYFecha("1", LocalDate.now());
-        assertEquals(1, comprasHoy.size());
-        assertTrue(comprasHoy.contains(compraHoy));
+        // 2. Mismo cliente, otra fecha
+        Compra compraFechaDistinta = new Compra("c2", cliente, 1000, compraAyer);
+        repo.guardar(compraFechaDistinta);
+
+        // 3.  cliente 2, misma fecha
+        Compra compraOtroCliente = new Compra("c3", cliente2, 1000, compraHoy);
+        repo.guardar(compraOtroCliente);
+
+        //Prueba
+        List<Compra> resultado = repo.obtenerPorClienteYFecha("1", compraHoy);
+        assertEquals(1, resultado.size());
+        assertEquals("c1", resultado.getFirst().getIdCompra());
     }
 
     @Test
